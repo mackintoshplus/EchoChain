@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <title>EchoChain</title>
+  </head>
+  <body>
+    <h1>Welcome to EchoChain!</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" />
+      <input type="submit" value="Upload" />
+    </form>
+
+    <div>
+      <input id="message" type="text" placeholder="Type your message here..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="messages"></div>
+
+    <script>
+      var socket = io.connect("http://127.0.0.1:5001");
+
+      function sendMessage() {
+        var message = document.getElementById("message").value;
+        socket.emit("message", message);
+        document.getElementById("message").value = "";
+      }
+
+      socket.on("message", function (data) {
+        var messages = document.getElementById("messages");
+        messages.innerHTML += "<p>" + data + "</p>";
+      });
+    </script>
+  </body>
+</html>
